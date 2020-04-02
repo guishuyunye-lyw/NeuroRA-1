@@ -7,6 +7,10 @@ __author__ = 'Zitong Lu'
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
+from nilearn import plotting, datasets, surface
+import nibabel as nib
+from neurora.stuff import get_affine
+from neurora.stuff import correct_by_threshold
 
 def plot_rdm(rdm, rescale=False):
 
@@ -214,3 +218,109 @@ def plot_corrs_hotmap(eegcorrs, chllabels=[], time_unit=[0, 0.1], lim=[0, 1], sm
     plt.ylabel("Channel", fontsize=20)
     plt.xlabel("Time (s)", fontsize=20)
     plt.show()
+
+def plot_brainrsa_regions(img, threshold=None):
+
+    if threshold != None:
+
+        imgarray = nib.load(img).get_data()
+        affine = get_affine(img)
+
+        imgarray = correct_by_threshold(imgarray, threshold)
+
+        img = nib.Nifti1Image(imgarray, affine)
+
+    bg = "template/ch2.nii.gz"
+
+    plotting.plot_roi(roi_img=img, bg_img=bg, threshold=0, vmin=0.1, vmax=1, title="Similarity", resampling_interpolation="continuous")
+
+    plt.show()
+
+def plot_brainrsa_montage(img, threshold=None, slice=[6, 6, 6]):
+
+    if threshold != None:
+
+        imgarray = nib.load(img).get_data()
+        affine = get_affine(img)
+
+        imgarray = correct_by_threshold(imgarray, threshold)
+
+        img = nib.Nifti1Image(imgarray, affine)
+
+    slice_x = np.shape(slice)[0]
+    slice_y = np.shape(slice)[1]
+    slice_z = np.shape(slice)[2]
+
+    bg = "template/ch2bet.nii.gz"
+
+    if slice_x != 0:
+        plotting.plot_stat_map(stat_map_img=img, bg_img=bg, display_mode='x', cut_coords=slice_x,
+                               title="Similarity -sagittal", draw_cross=True, vmax=1)
+    if slice_y != 0:
+        plotting.plot_stat_map(stat_map_img=img, bg_img=bg, display_mode='y', cut_coords=slice_y,
+                               title="Similarity -coronal", draw_cross=True, vmax=1)
+    if slice_z != 0:
+        plotting.plot_stat_map(stat_map_img=img, bg_img=bg, display_mode='z', cut_coords=slice_z,
+                               title="Similarity -axial", draw_cross=True, vmax=1)
+
+    return 0
+
+def plot_brainrsa_glass(img, threshold=None):
+
+    if threshold != None:
+
+        imgarray = nib.load(img).get_data()
+        affine = get_affine(img)
+
+        imgarray = correct_by_threshold(imgarray, threshold)
+
+        img = nib.Nifti1Image(imgarray, affine)
+
+    plotting.plot_glass_brain(img, colorbar=True, title="Similarity", black_bg=True, draw_cross=True, vmax=1)
+
+    plt.show()
+
+def plot_brainrsa_surface(img, threshold=None):
+
+    if threshold != None:
+
+        imgarray = nib.load(img).get_data()
+        affine = get_affine(img)
+
+        imgarray = correct_by_threshold(imgarray, threshold)
+
+        img = nib.Nifti1Image(imgarray, affine)
+
+    fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
+    texture_left = surface.vol_to_surf(img, fsaverage.pial_left)
+    texture_right = surface.vol_to_surf(img, fsaverage.pial_right)
+    plotting.plot_surf_stat_map(fsaverage.pial_left, texture_left, hemi='left', threshold=0.1,
+                                bg_map=fsaverage.sulc_right, colorbar=True, vmax=1, darkness=0.7)
+    plotting.plot_surf_stat_map(fsaverage.pial_right, texture_right, hemi='right', threshold=0.1,
+                                bg_map=fsaverage.sulc_right, colorbar=True, vmax=1, darkness=0.7)
+    plotting.plot_surf_stat_map(fsaverage.pial_left, texture_right, hemi='right', threshold=0.1,
+                                bg_map=fsaverage.sulc_right, colorbar=True, vmax=1, darkness=0.7)
+    plotting.plot_surf_stat_map(fsaverage.pial_right, texture_left, hemi='left', threshold=0.1,
+                                bg_map=fsaverage.sulc_right, colorbar=True, vmax=1, darkness=0.7)
+
+    plt.show()
+
+def plot_brainrsa_rlts(img, threshold=None, slice=[6, 6, 6]):
+
+    if threshold != None:
+
+        imgarray = nib.load(img).get_data()
+        affine = get_affine(img)
+
+        imgarray = correct_by_threshold(imgarray, threshold)
+
+        img = nib.Nifti1Image(imgarray, affine)
+
+    plot_brainrsa_regions(img, threshold=None)
+
+    plot_brainrsa_montage(img, threshold=None, slice=slice)
+
+    plot_brainrsa_glass(img, threshold=None)
+
+    plot_brainrsa_surface(img, threshold=None)
+
