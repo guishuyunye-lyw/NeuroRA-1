@@ -14,7 +14,11 @@ from neurora.stuff import get_affine, correct_by_threshold, get_bg_ch2, get_bg_c
 
 def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
 
-    if len(np.shape(rdm)) != 2:
+    cons = rdm.shape[0]
+
+    if cons == 2:
+
+        print("The shape of RDM cannot be 2*2. Here NeuroRA cannot plot this RDM.")
 
         return None
 
@@ -23,8 +27,6 @@ def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
     if a != b:
 
         return None
-
-    cons = rdm.shape[0]
 
     if rescale == True:
 
@@ -57,6 +59,8 @@ def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
         y = np.arange(cons*step-0.5*step, 0.5*step, -step)
         plt.xticks(x, conditions, fontsize=con_fontsize, rotation=30, ha="right")
         plt.yticks(y, conditions, fontsize=con_fontsize)
+    else:
+        plt.axis("off")
 
     plt.show()
 
@@ -64,7 +68,9 @@ def plot_rdm_withvalue(rdm, value_fontsize=10, conditions=None, con_fontsize=12)
 
     cons = rdm.shape[0]
 
-    if len(np.shape(rdm)) != 2:
+    if cons == 2:
+
+        print("The shape of RDM cannot be 2*2. Here NeuroRA cannot plot this RDM.")
 
         return None
 
@@ -95,6 +101,8 @@ def plot_rdm_withvalue(rdm, value_fontsize=10, conditions=None, con_fontsize=12)
         y = np.arange(cons*step-0.5*step, 0.5*step, -step)
         plt.xticks(x, conditions, fontsize=con_fontsize, rotation=30, ha="right")
         plt.yticks(y, conditions, fontsize=con_fontsize)
+    else:
+        plt.axis("off")
 
     plt.show()
 
@@ -265,9 +273,9 @@ def plot_brainrsa_montage(img, threshold=None, slice=[6, 6, 6], background=get_b
 
         img = nib.Nifti1Image(imgarray, affine)
 
-    slice_x = np.shape(slice)[0]
-    slice_y = np.shape(slice)[1]
-    slice_z = np.shape(slice)[2]
+    slice_x = slice[0]
+    slice_y = slice[1]
+    slice_z = slice[2]
 
     if slice_x != 0:
         plotting.plot_stat_map(stat_map_img=img, bg_img=background, display_mode='x', cut_coords=slice_x,
@@ -276,7 +284,7 @@ def plot_brainrsa_montage(img, threshold=None, slice=[6, 6, 6], background=get_b
         plotting.plot_stat_map(stat_map_img=img, bg_img=background, display_mode='y', cut_coords=slice_y,
                                title="Similarity -coronal", draw_cross=True, vmax=1)
     if slice_z != 0:
-        plotting.plot_stat_map(stat_map_img=img, bg_img=bg, display_mode='z', cut_coords=slice_z,
+        plotting.plot_stat_map(stat_map_img=img, bg_img=background, display_mode='z', cut_coords=slice_z,
                                title="Similarity -axial", draw_cross=True, vmax=1)
 
     return 0
@@ -348,5 +356,5 @@ def plot_brainrsa_rlts(img, threshold=None, slice=[6, 6, 6], background=None):
 
         plot_brainrsa_montage(img, threshold=threshold, slice=slice, background=background)
 
-        plot_brainrsa_glass(img, threshold=threshold)
+        plot_brainrsa_surface(img, threshold=threshold)
 
