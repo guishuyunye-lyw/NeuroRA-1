@@ -4,7 +4,6 @@
 
 __author__ = 'Zitong Lu'
 
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
@@ -13,7 +12,7 @@ from nilearn import plotting, datasets, surface
 import nibabel as nib
 from neurora.stuff import get_affine, correct_by_threshold, get_bg_ch2, get_bg_ch2bet
 
-def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
+def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12, cmap=None):
 
     cons = rdm.shape[0]
 
@@ -42,7 +41,10 @@ def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
                 if i != j:
                     rdm[i, j] = float((rdm[i, j]-minvalue)/(maxvalue-minvalue))
 
-    plt.imshow(rdm, extent=(0, 1, 0, 1), cmap=plt.cm.jet, clim=(0, 1))
+    if cmap == None:
+        plt.imshow(rdm, extent=(0, 1, 0, 1), cmap=plt.cm.jet, clim=(0, 1))
+    else:
+        plt.imshow(rdm, extent=(0, 1, 0, 1), cmap=cmap, clim=(0, 1))
 
     #plt.axis("off")
     cb = plt.colorbar()
@@ -65,7 +67,7 @@ def plot_rdm(rdm, rescale=False, conditions=None, con_fontsize=12):
 
     plt.show()
 
-def plot_rdm_withvalue(rdm, value_fontsize=10, conditions=None, con_fontsize=12):
+def plot_rdm_withvalue(rdm, value_fontsize=10, conditions=None, con_fontsize=12, cmap=None):
 
     cons = rdm.shape[0]
 
@@ -81,7 +83,10 @@ def plot_rdm_withvalue(rdm, value_fontsize=10, conditions=None, con_fontsize=12)
 
         return None
 
-    plt.imshow(rdm, cmap=plt.cm.Greens, clim=(0, 1))
+    if cmap == None:
+        plt.imshow(rdm, cmap=plt.cm.Greens, clim=(0, 1))
+    else:
+        plt.imshow(rdm, cmap=cmap, clim=(0, 1))
 
     plt.axis("off")
 
@@ -197,6 +202,8 @@ def plot_corrs_hotmap(eegcorrs, chllabels=None, time_unit=[0, 0.1], lim=[0, 1], 
     x = np.arange(start_t, end_t, tstep)
 
     if chllabels == None:
+
+        chllabels = []
         for i in range(nchls):
             if i % 10 == 0 and i != 10:
                 newlabel = str(i+1) + "st"
@@ -275,8 +282,8 @@ def plot_corrs_hotmap(eegcorrs, chllabels=None, time_unit=[0, 0.1], lim=[0, 1], 
     plt.show()
 
 def plot_nps_hotmap(similarities, chllabels=None, time_unit=[0, 0.1], lim=[0, 1], abs=False, smooth=False, figsize=None, cmap=None):
-    # eegcorrs represents the correlation coefficients time-by-time, its shape:
-    #       [N_chls, ts, 2] or [N_chls, ts], N_chls: number of channels, ts: number of time points, 2: a r-value and a p-value
+    # similarities represents the correlation coefficients time-by-time, its shape:
+    #       [N_chls, ts], N_chls: number of channels, ts: number of time points
     # chllabel represents the names of channels
     # time_unit=[start_t, t_step]
     # lim=[lower, upper], which represent the upper limit and lower limit for plotting of the r-values.
@@ -302,6 +309,7 @@ def plot_nps_hotmap(similarities, chllabels=None, time_unit=[0, 0.1], lim=[0, 1]
     x = np.arange(start_t, end_t, tstep)
 
     if chllabels == None:
+        chllabels = []
         for i in range(nchls):
             if i % 10 == 0 and i != 10:
                 newlabel = str(i + 1) + "st"
