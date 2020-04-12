@@ -17,6 +17,7 @@ from neurora.rdm_corr import rdm_correlation_spearman
 from neurora.corr_cal_by_rdm import rdms_corr
 from neurora.rsa_plot import plot_rdm, plot_corrs_by_time, plot_nps_hotmap, plot_corrs_hotmap
 
+
 """**********       Section 1: loading example data        **********"""
 """ Here, we use MNE-Python toolbox for loading data and processing """
 """ you can learn this process from MNE-Python (https://mne-tools.github.io/stable/index.html) """
@@ -91,10 +92,10 @@ nps_data[1] = avg_megdata_nonhumanface[:, :, :5, 100:1100] # so 100:1200 corresp
 nps = nps(nps_data, time_win=10)
 
 # Plot the NPS results
-plot_nps_hotmap(nps, time_unit=[0, 0.01], abs=True)
+plot_nps_hotmap(nps[:, :, 0], time_unit=[0, 0.01], abs=True)
 
 # Smooth the results and plot
-plot_nps_hotmap(nps, time_unit=[0, 0.01], abs=True, smooth=True)
+plot_nps_hotmap(nps[:, :, 0], time_unit=[0, 0.01], abs=True, smooth=True)
 
 
 
