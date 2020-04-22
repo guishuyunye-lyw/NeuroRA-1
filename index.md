@@ -22,7 +22,7 @@ Lu, Z., & Ku, Y. NeuroRA: A Python toolbox of representational analysis from mul
 
 ## Documentation
 
-You can read or download the **[Tutorial here](https://zitonglu1996.github.io/NeuroRA/neurora/Tutorial.pdf)**.
+You can read or download the **[Tutorial here](https://neurora.github.io/NeuroRA/neurora/Tutorial.pdf)**.
 
 ## Required Dependencies:
 - **[Numpy](http://www.numpy.org)**: a fundamental package for scientific computing
@@ -106,7 +106,7 @@ There are two demos in Tutorial to let you know how to use NeuroRA to conduct re
     
     > **Section 8**: Saving the RSA result and Plotting
 
-Users can see more details in [Tutorial](https://zitonglu1996.github.io/NeuroRA/neurora/Tutorial.pdf) and [Demo Codes](https://github.com/ZitongLu1996/NeuroRA/tree/master/demo).
+Users can see more details in [Tutorial](https://neurora.github.io/NeuroRA/neurora/Tutorial.pdf) and [Demo Codes](https://github.com/neurora/NeuroRA/tree/master/demo).
 
 ## About NeuroRA
 
