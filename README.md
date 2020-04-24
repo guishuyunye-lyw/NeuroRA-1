@@ -28,6 +28,8 @@ You can read or download the [Tutorial here](https://zitonglu1996.github.io/Neur
 
 - Calculate the Neural Pattern Similarity (NPS)
 
+- Calculate the Spatiotemporal Pattern Similarity (STPS)
+
 - Calculate the Representational Dissimilarity Matrix (RDM)
 
 - Calculate the Representational Similarity based on RDMs
