@@ -35,6 +35,8 @@ You can read or download the **[Tutorial here](https://neurora.github.io/NeuroRA
 
 - Calculate the Neural Pattern Similarity (NPS)
 
+- Calculate the Spatiotemporal Pattern Similarity (STPS)
+
 - Calculate the Representational Dissimilarity Matrix (RDM)
 
     > for each subject / for each channel / for each time-point / searchlight / for ROI / all in
